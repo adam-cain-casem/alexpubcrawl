@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<title>Alex’s Historical Pub Crawl</title>
+<style>
+:root{--bg:#e6d6b4;--ink:#3b2a1a;--muted:#7a6244;--card:#f2e5c4;--line:#8c2f1b;--road:#b9a47a;--water:#b9cdc6;--pin:#1f3a4d;--pinink:#f2e5c4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1511;--ink:#f1e8d8;--muted:#b3a58f;--card:#262019;--line:#e0794a;--road:#3b3226;--water:#1d2f35;--pin:#4fb3ac;--pinink:#10201f}}
+:root[data-theme="dark"]{--bg:#1a1511;--ink:#f1e8d8;--muted:#b3a58f;--card:#262019;--line:#e0794a;--road:#3b3226;--water:#1d2f35;--pin:#4fb3ac;--pinink:#10201f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IM Fell English",Georgia,"Times New Roman",serif;line-height:1.5}
+main{max-width:520px;margin:0 auto;padding:16px}
+h1{font-family:"IM Fell English SC",Georgia,serif;font-weight:400;font-size:1.75rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;margin:.2em 0 .1em}.sub{text-align:center}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.95rem}
+svg{width:100%;height:auto;display:block;border-radius:12px;background:var(--card)}
+.water{fill:var(--water)}
+.rd{fill:none;stroke:var(--road);stroke-width:7;stroke-linecap:round}
+.rl{font:italic 15px "IM Fell English",Georgia,serif;fill:var(--muted)}.cas{fill:none;stroke:var(--card);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}.kb{fill:var(--card);stroke:var(--road);stroke-width:2}.kt{font:14px "IM Fell English",Georgia,serif;fill:var(--ink)}.kp{fill:var(--muted);font-family:"Times New Roman",Times,serif;font-size:13px;font-variant-numeric:lining-nums}.pc{font-family:"Times New Roman",Times,serif;font-size:.9em}.qt{font:11px "IM Fell English SC",Georgia,serif;letter-spacing:1.4px;fill:var(--ink);opacity:.8}.tg{flex:none;padding:6px 14px;font-size:.9rem}.kc{fill:var(--pin)}.kn{font:bold 10px "Times New Roman",Times,serif;fill:var(--pinink);text-anchor:middle}
+.seg{fill:none;stroke:var(--line);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.pin circle{fill:var(--pin);stroke:var(--card);stroke-width:4;cursor:pointer}
+.pin text{fill:var(--pinink);font:bold 21px "Times New Roman",Times,serif;text-anchor:middle;pointer-events:none}
+.pin.on circle{fill:var(--line)}
+.card{background:var(--card);border-radius:14px;padding:16px;margin-top:12px;box-shadow:0 1px 6px rgba(0,0,0,.15)}
+.card h2{margin:0 0 2px;font-size:1.25rem}
+.addr{color:var(--muted);font-size:.85rem;margin:0 0 10px}
+
+.walk{font-size:.9rem;color:var(--pin);margin-top:10px}.card img{width:100%;display:block;border-radius:4px;border:3px double var(--line);margin-bottom:10px}.cp{stroke:var(--ink);fill:none;stroke-width:1.5}.cpf{fill:var(--line);stroke:var(--ink);stroke-width:1}.cpt{font:18px "IM Fell English SC",serif;fill:var(--ink);text-anchor:middle;stroke:none}
+.nav{display:flex;gap:8px;margin-top:12px}
+button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--ink);font:inherit;cursor:pointer}
+ol{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:4px}
+ol button{text-align:left;border-color:var(--road);padding:8px 10px}
+a{color:var(--pin)}.hm{fill:none;stroke:var(--pinink);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}.pin.home circle{fill:var(--ink)}.pin.home.on circle{fill:var(--line)}.maplink{text-align:center;margin:10px 0 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Alex’s Historical Pub Crawl</h1>
+<p class="sub">Nine stops, starting and finishing at the hotel. Tap a pin for its story.</p>
+<svg id="map" viewBox="150 0 600 620" role="img" aria-label="Route map of the pub crawl"></svg>
+<p class="maplink"><a href="https://maps.app.goo.gl/YLoPmutgmRXRfMtB7" target="_blank" rel="noopener">Open the walking route in Google Maps ↗</a></p>
+<p class="maplink"><button class="tg" id="qb">Hide quarters</button></p>
+<div class="card" id="card"></div>
+<div class="nav"><button id="prev">← Previous</button><button id="next">Next →</button></div>
+<ol id="list"></ol>
+</main>
+<script>
+// x,y are projected from approximate latitude/longitude. Edit here to nudge any pin.
+var P=[
+{n:"Fenwick Street Hotel by EPIC",k:"EPIC Hotel",a:"11 Fenwick St, L2 7LS",x:224,y:323,home:1,h:"Rest your weary eyes."},
+{n:"Gaucho Liverpool",a:"7 Water St, L2 0RD",x:199,y:272,h:"Formerly the Bank of Liverpool building (Il Palazzo), built in 1899 in the style of Palazzo Pompei. The Grade II listed building previously served as a bank and office space. The doors feature distinctive animal heads, often described locally as lions or tigers. Local legend has it that sailors leaving the port would stroke the open jaws of these bronze heads for luck before departing, and touch them again on a safe return. The fangs on the door handles are noticeably worn today."},
+{n:"Ye Hole in Ye Wall",a:"4 Hackins Hey, L2 2AW",x:255,y:218,h:"The pub proudly displays a 1726 foundation date, tying its early history to the area’s development near an 18th-century Quaker burial ground and meeting house. The cosy wood-panelled interior largely dates from a major inter-war refit in the 1930s. Close to the commercial district and the docks, it became a heavily frequented sanctuary for Allied servicemen and American GIs, and it survived the bombing that devastated the surrounding area during the Blitz. Local folklore links the pub to paranormal sightings, including a figure in a long wax jacket and the ghost of an 18th-century Spanish sailor.",l:"https://www.bbc.co.uk/sounds/play/p0ndzxwp",lt:"Listen on BBC Sounds"},
+{n:"Thomas Rigby’s",a:"23–25 Dale St, L2 2EZ",x:295,y:197,h:"A Grade II listed pub in the lower level of the landmark Rigby’s Buildings. The facade shows 1726, but the current structure was rebuilt around 1850–52. It is named after Alderman Thomas Rigby, a wine and spirits merchant who arrived in Liverpool around 1830 from humble beginnings and built a fortune through pubs and hotels. When he added the ornate stucco frontage in 1865, he wanted it to look ancient, choosing a dramatic imitation-medieval style. Look up and you will spot a range of hand-carved wooden grotesques staring down at passers-by on Dale Street."},
+{n:"The Ship & Mitre",a:"133 Dale St, L2 2JH",x:459,y:95,h:"A Dale Street favourite among real-ale drinkers, known for a large rotating range of cask beers and ciders, just along from the Queensway Tunnel entrance. The pub has its roots as a coaching inn dating back to 1822, serving travellers on long stagecoach journeys. The name honours two pillars of local history: the “Ship” reflects Liverpool’s maritime and port heritage, while the “Mitre”, a bishop’s ceremonial headdress, represents the area’s religious roots."},
+{n:"Doctor Duncan’s",a:"St John’s Ln, Queen Square, L1 1HF",x:538,y:170,h:"Named after Dr William Henry Duncan, who in 1847 became Britain’s first Medical Officer of Health, appointed by Liverpool at a time when overcrowded slums and repeated cholera and typhus outbreaks gave the city a terrible reputation. His tireless advocacy led to the Liverpool Sanitary Act of 1846 and fundamentally transformed public health standards across Britain. The pub building dates from 1901 and was designed by Alfred Waterhouse, the Liverpool-born architect and leading figure of the Gothic Revival, known for other works such as the Natural History Museum in London."},
+{n:"The Jacaranda",a:"21–23 Slater St, L1 4BW",x:629,y:512,h:"Built between the late 18th and early 19th century as a Georgian merchant townhouse, 21 Slater Street later passed into commercial use and was a watch and clock repair shop when Allan Williams, later the Beatles’ first manager, leased it and opened the Jacaranda in September 1958. He turned it into a coffee bar with one of the city’s first Gaggia espresso machines, an American-style jukebox and live music in the basement. John Lennon, Paul McCartney, George Harrison and Stuart Sutcliffe became regulars, and Williams put the young band to work redecorating in exchange for rehearsal space and drinks, with Lennon and Sutcliffe painting a famous mural in the basement ladies’ powder room. Williams went on to take the group to Hamburg in August 1960, and the Beatles are said to have agreed and announced their definitive change of name at the venue shortly before the trip."},
+{n:"The Monro",a:"Duke St, L1 5AG",x:592,y:573,h:"Built in the mid-18th century as a pair of grand merchant townhouses, the building originally catered to wealthy sea captains and traders during Liverpool’s rapid maritime expansion, before becoming a beer house around 1817. The pub was later named The Monro in honour of the HMS Monro, a packet ship that regularly sailed trade routes between Liverpool and New York.</p><p>Duke Street lies in the Ropewalks district, named for the long ropemaking yards that once supplied the port’s sailing ships. Many of the surrounding streets date from the 18th and 19th centuries, when merchants and shipping families built townhouses and warehouses here."},
+{n:"The Bridewell",a:"1 Campbell Square, L1 5FB",x:447,y:541,h:"Built as the Campbell Square Bridewell to police the rough marine district and docks, it held over 100 petty offenders, vagabonds and intoxicated sailors each month. The novelist Charles Dickens reportedly had himself sworn in as a Liverpool special constable for a single night to patrol the area and gather inspiration for The Uncommercial Traveller. The building ceased operation as a prison in 1932. During the Second World War it saw secondary uses, including housing US military personnel and conscientious objectors. The disused cells and rooms later served as a rehearsal and writing space for local alternative bands, most notably Frankie Goes to Hollywood, who wrote much of their debut album Welcome to the Pleasuredome inside the building. A “bridewell” was the old term for a local jail or house of correction, and original cells survive inside."},
+{n:"The Cavern Club",a:"8–10 Mathew St, L2 6RE",x:348,y:290,h:"The Cavern opened in January 1957 as a jazz club in the cellars of a Mathew Street warehouse, in a district of fruit and cotton warehouses. The Beatles are credited with nearly 300 appearances here between 1961 and 1963, and Brian Epstein first saw them play here in November 1961. British Rail obtained a compulsory purchase order in 1973 for an underground railway project, and the original venue was bulldozed and the cellar filled in. Following renewed interest after John Lennon’s death in 1980, the cellar was excavated, partially dismantled and rebuilt using thousands of saved original bricks. It reopened in 1984."}
+];
+var S=["Fenwick St · Water St","Water St · Castle St · Hackins Hey","Hackins Hey · Dale St","Dale St","Dale St · St John’s Ln","Lime St · Renshaw St · Slater St","Slater St · Duke St","Duke St · Campbell Sq","Hanover St · Whitechapel · Mathew St","Mathew St · Fenwick St"];
+var L=["224,323 217,313 209,296 199,272","199,272 212,251 235,238 250,228 255,218","255,218 270,210 285,205 295,197","295,197 459,95","459,95 485,85 515,75 528,92 532,118 535,150 538,170","538,170 556,183 580,194 596,205 611,215 622,235 628,251 634,268 640,281 651,298 659,317 668,338 674,358 684,377 693,392 700,406 701,418 691,425 677,432 662,449 653,463 647,479 640,492 632,503 629,512","629,512 615,530 607,547 596,564 592,573","592,573 573,566 556,560 539,553 522,546 505,539 488,534 476,528 465,521 461,530 454,543 447,541","447,541 433,530 421,523 410,515 404,501 402,479 402,458 402,436 402,415 404,394 407,377 414,360 417,343 417,326 419,311 410,302 399,285 385,283 368,283 348,290","348,290 319,300 285,313 251,321 224,323"];
+var NS="http://www.w3.org/2000/svg",svg=document.getElementById("map"),cur=0,pins=[];
+function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e}
+svg.insertAdjacentHTML("beforeend",'<defs><radialGradient id="vg" cx="50%" cy="50%" r="75%"><stop offset="60%" stop-color="#7a4f1d" stop-opacity="0"/><stop offset="100%" stop-color="#7a4f1d" stop-opacity=".3"/></radialGradient></defs><rect x="150" y="0" width="600" height="620" fill="url(#vg)"/>');
+svg.insertAdjacentHTML("beforeend",'<g id="qg" style="pointer-events:none"><g opacity=".2"><polygon points="224,323 199,272 255,218 295,197" fill="#3f6f8f" stroke="#3f6f8f" stroke-width="64" stroke-linejoin="round"/><polyline points="459,95 538,170" fill="none" stroke="#7a5c9e" stroke-width="68" stroke-linecap="round"/><polygon points="447,541 592,573 629,512" fill="#5f8a4f" stroke="#5f8a4f" stroke-width="56" stroke-linejoin="round"/><circle cx="348" cy="290" r="48" fill="#c08a2b"/></g><text class="qt" x="168" y="188">COMMERCIAL</text><text class="qt" x="168" y="201">DISTRICT</text><text class="qt" x="440" y="52" text-anchor="middle">ST GEORGE’S QUARTER</text><text class="qt" x="520" y="510" text-anchor="middle">ROPEWALKS</text><text class="qt" x="348" y="258" text-anchor="middle">CAVERN QUARTER</text></g>');
+svg.insertAdjacentHTML("beforeend",'<g transform="translate(655,102)"><g class="cp"><circle r="56"/><circle r="52"/><circle r="46" stroke-dasharray="1.5 5.5"/><circle r="30"/><polygon transform="rotate(22.5)" points="0,-40 5,-5 40,0 5,5 0,40 -5,5 -40,0 -5,-5"/><polygon transform="rotate(67.5)" points="0,-40 5,-5 40,0 5,5 0,40 -5,5 -40,0 -5,-5"/><polygon transform="rotate(45)" points="0,-46 6,-6 46,0 6,6 0,46 -6,6 -46,0 -6,-6"/></g><polygon class="cpf" points="0,-62 8,-8 62,0 8,8 0,62 -8,8 -62,0 -8,-8"/><circle class="cpf" r="4"/><text class="cpt" y="-68">N</text><text class="cpt" x="73" y="6">E</text><text class="cpt" y="90">S</text><text class="cpt" x="-73" y="6">W</text></g><g class="cp"><path d="M172 588H276M172 582V594M276 582V594M224 584V592"/></g><text class="rl" x="224" y="574" text-anchor="middle">200 m</text><rect x="154" y="4" width="592" height="612" fill="none" style="stroke:var(--ink);stroke-width:3"/><rect x="162" y="12" width="576" height="596" fill="none" style="stroke:var(--ink);stroke-width:1"/>');
+[["Water St",170,222,"start"],["Dale St",395,162,"start"],["Lime St",655,240,"start"],["Renshaw St",650,362,"end"],["Slater St",660,560,"start"]].forEach(function(r){var q=el("text",{"class":"rl",x:r[1],y:r[2],"text-anchor":r[3]});q.textContent=r[0]});
+var ds=el("text",{"class":"rl",x:522,y:573,"text-anchor":"middle",transform:"rotate(20.6 522 573)"});ds.textContent="Duke St";
+function road(d,lx,ly,t,rot){el("path",{"class":"rd",d:d});var q=el("text",{"class":"rl",x:lx,y:ly,transform:rot?"rotate("+rot+" "+lx+" "+ly+")":""});q.textContent=t}
+
+L.forEach(function(s){el("polyline",{"class":"cas",points:s})});L.forEach(function(s){el("polyline",{"class":"seg",points:s})});
+var KT=[];var kbx=el("rect",{"class":"kb",x:166,y:356,width:206,height:184,rx:10});
+var kh=el("text",{"class":"kt",x:178,y:378,"font-weight":"bold"});kh.textContent="Key";
+P.forEach(function(p,i){var y=400+i*14.5;el("circle",{"class":"kc",cx:184,cy:y-4.5,r:7});var n=el("text",{"class":"kn",x:184,y:y-1.2});n.textContent=p.home?"":i;if(p.home)el("path",{"class":"hm","style":"stroke-width:1.6","d":"M179 "+(y-3.5)+"L184 "+(y-8.5)+"L189 "+(y-3.5)+"M180.5 "+(y-4.5)+"V"+(y-0.5)+"H187.5V"+(y-4.5)});var t=el("text",{"class":"kt",x:197,y:y});t.textContent=(p.k||p.n)+" ";var s=document.createElementNS(NS,"tspan");s.setAttribute("class","kp");s.textContent=p.a.match(/L\d \d[A-Z]{2}$/)[0];t.appendChild(s);KT.push(t)});function fitKey(){var m=0;KT.forEach(function(t){var b=t.getBBox();m=Math.max(m,b.x+b.width)});kbx.setAttribute("width",Math.max(206,Math.ceil(m+14-166)))}fitKey();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitKey);
+P.forEach(function(p,i){var g=el("g",{"class":"pin"+(p.home?" home":"")}),c=document.createElementNS(NS,"circle");c.setAttribute("cx",p.x);c.setAttribute("cy",p.y);c.setAttribute("r",18);g.appendChild(c);
+var t=document.createElementNS(NS,"text");t.setAttribute("x",p.x);t.setAttribute("y",p.y+7);if(p.home){var hp=document.createElementNS(NS,"path");hp.setAttribute("d","M"+(p.x-10)+" "+(p.y+1)+"L"+p.x+" "+(p.y-9)+"L"+(p.x+10)+" "+(p.y+1)+"M"+(p.x-7)+" "+(p.y-1)+"V"+(p.y+9)+"H"+(p.x+7)+"V"+(p.y-1));hp.setAttribute("class","hm");g.appendChild(hp)}else{t.textContent=i;g.appendChild(t)}
+g.addEventListener("click",function(){show(i)});pins.push(g);
+var b=document.createElement("button");b.textContent=(p.home?"⌂ ":i+". ")+p.n;b.onclick=function(){show(i)};var li=document.createElement("li");li.appendChild(b);document.getElementById("list").appendChild(li)});
+function show(i){cur=i;var p=P[i];pins.forEach(function(g,j){g.setAttribute("class","pin"+(P[j].home?" home":"")+(j==i?" on":""))});
+var h=(p.img?'<img src="'+p.img+'" alt="'+p.n+'">':"")+"<p>"+p.h+"</p>";if(p.l)h+='<p><a href="'+p.l+'" target="_blank" rel="noopener">'+p.lt+' ↗</a></p>';
+var n='<div class="walk">'+(i==0?"Start and finish here. ":"")+"Next: "+P[(i+1)%P.length].n+" via "+S[i]+"</div>";
+document.getElementById("card").innerHTML="<h2>"+(p.home?"":i+". ")+p.n+"</h2><p class=\"addr\">"+p.a.replace(/(L\d \d[A-Z]{2})$/,'<span class="pc">$1</span>')+"</p>"+h+n}
+document.getElementById("prev").onclick=function(){show(Math.max(0,cur-1))};
+document.getElementById("next").onclick=function(){show(Math.min(P.length-1,cur+1))};
+var qb=document.getElementById("qb"),qg=document.getElementById("qg");qb.onclick=function(){var h=qg.style.display=="none";qg.style.display=h?"":"none";qb.textContent=h?"Hide quarters":"Show quarters"};
+show(0);
+</script>
+</body>
+</html>
